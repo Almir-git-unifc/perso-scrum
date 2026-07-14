@@ -1,15 +1,15 @@
 {
   "name": "perso-scru",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.2",
   "type": "module",
   "scripts": {
-    "dev":     "vite",
-    "build":   "vite build",
+    "dev": "vite",
+    "build": "vite build",
     "preview": "vite preview",
     "prepare": "husky",
-    "test":    "echo \"Sem testes por enquanto\"",
-    "commit":  "cz",
+    "test": "echo \"Sem testes por enquanto\"",
+    "commit": "cz",
     "release": "standard-version && git push origin main --follow-tags"
   },
   "dependencies": {
