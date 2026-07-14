@@ -10,7 +10,7 @@ docs(vers_ocorr.md): ver_man 00.04.000 – send a new branch for manual test num
 
 fix watchers: ver_man 00.05.000 – resolve falha de polling no monitoramento#254 to watches=524288
 
-
+feat(side menu): ver_man 01.0.000 – global side menu opens blank pages
 
 
 
