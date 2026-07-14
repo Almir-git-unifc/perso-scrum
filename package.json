@@ -1,7 +1,7 @@
 {
   "name": "perso-scru",
   "private": true,
-  "version": "0.0.2",
+  "version": "0.1.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,7 +10,7 @@
     "prepare": "husky",
     "test": "echo \"Sem testes por enquanto\"",
     "commit": "cz",
-    "release": "standard-version && git push origin main --follow-tags"
+    "release": "standard-version"
   },
   "dependencies": {
     "pinia": "^3.0.4",
