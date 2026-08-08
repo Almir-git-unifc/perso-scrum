@@ -9,7 +9,7 @@ import MetasFuturas from '../views/MetasFuturas.vue'
 const routes = [
     {
         path: '/',
-        redirect: '/backlog'
+        redirect: '/cadastro'
     },
 
     {
