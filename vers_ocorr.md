@@ -12,6 +12,10 @@ fix watchers: ver_man 00.05.000 – resolve falha de polling no monitoramento#25
 
 feat(side menu): ver_man 01.0.000 – global side menu opens blank pages
 
+fix(tag): ver_man 0.1.1 - update version automomate version 00.1.001 or 0.1.1
+
+update readme.md
+
 
 
 
