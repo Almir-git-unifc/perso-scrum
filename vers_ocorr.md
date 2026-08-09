@@ -28,6 +28,8 @@ feat(core): ver_man 00.10.000 – Send All file support Screen
 
 feat(fix): ver_man 00.10.001 – Fixed editable fields regarding the per-screen fixed message functionality.
 
+feat(backup): ver_man 00.11.001 – implemented function for localStorage backup and restoration
+
 update readme.md
 
 
