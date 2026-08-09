@@ -1,5 +1,30 @@
 <template>
   <DefaultLayout>
+
+
+<div class="card-secao backup-box">
+    <h3>💾 Backup e Restauração dos Dados</h3>
+    <p>Exporte o estado atual do seu Kanban/Scrum para um arquivo JSON ou restaure um backup prévio.</p>
+    
+    <div class="botoes-backup">
+      <!-- Botão para Baixar o Backup -->
+      <button @click="ativStore.exportarDadosJSON()" class="btn-backup exportar">
+        📥 Baixar Backup (.JSON)
+      </button>
+
+      <!-- Botão/Input para Carregar o Backup -->
+      <label class="btn-backup importar">
+        📤 Importar / Popular Dados
+        <input 
+          type="file" 
+          accept=".json" 
+          @change="ativStore.importarDadosJSON" 
+          style="display: none;" 
+        />
+      </label>
+    </div>
+  </div>
+
     <div class="cadastro-page">
       <h1>Painel de Configuração e Cadastros</h1>
       <Alertas tela="cadastro" />
@@ -373,6 +398,8 @@ const limparFormulario = () => {
 };
 </script>
 
+
+
 <style scoped>
 .painel-grid {
   display: grid;
@@ -555,5 +582,63 @@ input, select, textarea {
   border: none;
   color: #e74c3c;
   cursor: pointer;
+}
+
+
+.backup-box {
+  margin-bottom: 20px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 15px;
+}
+
+.backup-box h3 {
+  margin-top: 0;
+  font-size: 1.05rem;
+  color: #2d3748;
+}
+
+.backup-box p {
+  font-size: 0.85rem;
+  color: #718096;
+  margin-bottom: 12px;
+}
+
+.botoes-backup {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-backup {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.btn-backup.exportar {
+  background-color: #3182ce;
+  color: white;
+}
+
+.btn-backup.exportar:hover {
+  background-color: #2b6cb0;
+}
+
+.btn-backup.importar {
+  background-color: #38a169;
+  color: white;
+}
+
+.btn-backup.importar:hover {
+  background-color: #2f855a;
 }
 </style>

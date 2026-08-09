@@ -10,7 +10,7 @@ export const useAtividadesStore = defineStore("atividades", {
       hoje: [],
       ontem: [],
       impedimentos: [],
-      metas: []
+      metas: [],
     },
   }),
 
@@ -23,7 +23,8 @@ export const useAtividadesStore = defineStore("atividades", {
         ...atividade,
         id: Date.now().toString(),
         dataCriacao: hojeStr,
-        dataEntradaBacklog: atividade.telaDestino === "backlog" ? hojeStr : null,
+        dataEntradaBacklog:
+          atividade.telaDestino === "backlog" ? hojeStr : null,
         concluida: false,
         dataConclusao: null,
         detalhesDia: "",
@@ -47,7 +48,10 @@ export const useAtividadesStore = defineStore("atividades", {
     },
 
     moverParaHoje(id) {
-      this.atualizarAtividade(id, { telaDestino: "hoje", status: "Já selecionado" });
+      this.atualizarAtividade(id, {
+        telaDestino: "hoje",
+        status: "Já selecionado",
+      });
     },
 
     marcarConcluida(id, statusConclusao) {
@@ -95,7 +99,7 @@ export const useAtividadesStore = defineStore("atividades", {
     },
 
     // === MÉTODOS DE ALERTAS (CORRIGIDOS) ===
-    adicionarAlerta(tela, texto, tipo = 'info') {
+    adicionarAlerta(tela, texto, tipo = "info") {
       if (!this.alertasPorTela[tela]) {
         this.alertasPorTela[tela] = [];
       }
@@ -106,7 +110,7 @@ export const useAtividadesStore = defineStore("atividades", {
       this.alertasPorTela[tela].push({
         id: Date.now().toString(),
         texto: texto.trim(),
-        tipo: tipo
+        tipo: tipo,
       });
       this.salvarLocal();
       return true;
@@ -114,12 +118,12 @@ export const useAtividadesStore = defineStore("atividades", {
 
     atualizarAlerta(tela, id, novoTexto, novoTipo) {
       if (this.alertasPorTela[tela]) {
-        const index = this.alertasPorTela[tela].findIndex(a => a.id === id);
+        const index = this.alertasPorTela[tela].findIndex((a) => a.id === id);
         if (index !== -1) {
           this.alertasPorTela[tela][index] = {
             id,
             texto: novoTexto.trim(),
-            tipo: novoTipo || 'info'
+            tipo: novoTipo || "info",
           };
           this.salvarLocal();
         }
@@ -128,7 +132,9 @@ export const useAtividadesStore = defineStore("atividades", {
 
     removerAlerta(tela, id) {
       if (this.alertasPorTela[tela]) {
-        this.alertasPorTela[tela] = this.alertasPorTela[tela].filter(a => a.id !== id);
+        this.alertasPorTela[tela] = this.alertasPorTela[tela].filter(
+          (a) => a.id !== id,
+        );
         this.salvarLocal();
       }
     },
@@ -136,7 +142,10 @@ export const useAtividadesStore = defineStore("atividades", {
     // === PERSISTÊNCIA ===
     salvarLocal() {
       localStorage.setItem("scrum_atividades", JSON.stringify(this.atividades));
-      localStorage.setItem("scrum_alertas", JSON.stringify(this.alertasPorTela));
+      localStorage.setItem(
+        "scrum_alertas",
+        JSON.stringify(this.alertasPorTela),
+      );
     },
 
     carregarLocal() {
@@ -153,13 +162,88 @@ export const useAtividadesStore = defineStore("atividades", {
           Object.keys(parsed).forEach((tela) => {
             if (Array.isArray(parsed[tela])) {
               // Filtra alertas válidos (com texto)
-              this.alertasPorTela[tela] = parsed[tela].filter(a => a && a.texto && a.texto.trim() !== "");
+              this.alertasPorTela[tela] = parsed[tela].filter(
+                (a) => a && a.texto && a.texto.trim() !== "",
+              );
             }
           });
         } catch (e) {
           console.error("Erro ao carregar alertas:", e);
         }
       }
+    },
+
+    exportarDadosJSON() {
+      /** Coleta todos os dados persistidos no localStorage */ 
+      const backupData = {
+        /** backupData = backup de localStorage */
+        atividades: JSON.parse(
+          localStorage.getItem("scrum_atividades") || "[]",
+        ),
+        alertas: JSON.parse(localStorage.getItem("scrum_alertas") || "{}"),
+        devs: JSON.parse(localStorage.getItem("scrum_devs") || "[]"), // ajuste a chave se for diferente
+        dataExportacao: new Date().toISOString(),
+      };
+
+      // Cria um arquivo blob e dispara o download do .json
+      const dataStr =
+        "data:text/json;charset=utf-8," +
+        encodeURIComponent(JSON.stringify(backupData, null, 2));
+      const downloadAnchor = document.createElement("a");
+
+      const dataHoje = new Date().toISOString().split("T")[0];
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `scrum_backup_${dataHoje}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    },
+
+    importarDadosJSON(event) {
+      /** importarDadosJSON = importa dados de localStorage */
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const conteudo = JSON.parse(e.target.result);
+
+          // Validação básica do arquivo
+          if (!conteudo.atividades || !conteudo.alertas) {
+            alert("Arquivo de backup inválido!");
+            return;
+          }
+
+          if (
+            confirm(
+              "Importar os dados substituirá todas as informações atuais do sistema. Deseja continuar?",
+            )
+          ) {
+            // Atualiza o localStorage
+            localStorage.setItem(
+              "scrum_atividades",
+              JSON.stringify(conteudo.atividades),
+            );
+            localStorage.setItem(
+              "scrum_alertas",
+              JSON.stringify(conteudo.alertas),
+            );
+
+            if (conteudo.devs) {
+              localStorage.setItem("scrum_devs", JSON.stringify(conteudo.devs));
+            }
+
+            // Recarrega os dados na Store e atualiza a tela
+            this.carregarLocal();
+            window.location.reload(); // Recarrega a página para atualizar todas as stores
+          }
+        } catch (err) {
+          alert("Erro ao ler o arquivo JSON de backup: " + err.message);
+        }
+      };
+
+      reader.readAsText(file);
     },
   },
 });
