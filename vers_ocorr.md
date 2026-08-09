@@ -22,9 +22,11 @@ feat(fazendohoje.vue): ver_man 00.07.000 – implements Fazendo Hoje Screen
 
 feat(impedimentos.vue): ver_man 00.08.000 – implements Impedimentos.vue Screen
 
-feat(metasfuturas.vue): ver_man 00.09.000 – implements MetasFuturas.vue Screen
+feat(metasfuturas): ver_man 00.09.000 – implements MetasFuturas.vue Screen
 
 feat(core): ver_man 00.10.000 – Send All file support Screen
+
+feat(fix): ver_man 00.10.001 – Fixed editable fields regarding the per-screen fixed message functionality.
 
 update readme.md
 

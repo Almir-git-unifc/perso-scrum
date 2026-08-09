@@ -9,7 +9,7 @@
     const atividadesStore = useAtividadesStore();
 
     onMounted(() => {
-    /** Method onMounted de App.vue = Dispara a leitura do localStorage assim que o componente principal for montado  */
+    /** Method onMounted de App.vue = Carrega os dados do localStorage na inicialização da aplicação  */
     atividadesStore.carregarLocal();
     });
 </script>
