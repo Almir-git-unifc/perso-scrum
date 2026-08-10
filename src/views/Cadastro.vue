@@ -1,29 +1,26 @@
 <template>
   <DefaultLayout>
+    <!-- BLOCO DE BACKUP E RESTAURAÇÃO -->
+    <div class="card-secao backup-box">
+      <h3>💾 Backup e Restauração dos Dados</h3>
+      <p>Exporte o estado atual do seu Kanban/Scrum para um arquivo JSON ou restaure um backup prévio.</p>
+      
+      <div class="botoes-backup">
+        <button @click="ativStore.exportarDadosJSON()" class="btn-backup exportar">
+          📥 Baixar Backup (.JSON)
+        </button>
 
-
-<div class="card-secao backup-box">
-    <h3>💾 Backup e Restauração dos Dados</h3>
-    <p>Exporte o estado atual do seu Kanban/Scrum para um arquivo JSON ou restaure um backup prévio.</p>
-    
-    <div class="botoes-backup">
-      <!-- Botão para Baixar o Backup -->
-      <button @click="ativStore.exportarDadosJSON()" class="btn-backup exportar">
-        📥 Baixar Backup (.JSON)
-      </button>
-
-      <!-- Botão/Input para Carregar o Backup -->
-      <label class="btn-backup importar">
-        📤 Importar / Popular Dados
-        <input 
-          type="file" 
-          accept=".json" 
-          @change="ativStore.importarDadosJSON" 
-          style="display: none;" 
-        />
-      </label>
+        <label class="btn-backup importar">
+          📤 Importar / Popular Dados
+          <input 
+            type="file" 
+            accept=".json" 
+            @change="ativStore.importarDadosJSON" 
+            style="display: none;" 
+          />
+        </label>
+      </div>
     </div>
-  </div>
 
     <div class="cadastro-page">
       <h1>Painel de Configuração e Cadastros</h1>
@@ -109,14 +106,128 @@
               </div>
             </div>
 
-            <div class="form-group smart-checkbox-group">
-              <label>Classificação SMART:</label>
-              <div class="checkbox-grid">
-                <label class="smart-item"><input type="checkbox" v-model="novaAtiv.smart.S" /> <span><strong>S</strong> - Esp.</span></label>
-                <label class="smart-item"><input type="checkbox" v-model="novaAtiv.smart.M" /> <span><strong>M</strong> - Mens.</span></label>
-                <label class="smart-item"><input type="checkbox" v-model="novaAtiv.smart.A" /> <span><strong>A</strong> - Atin.</span></label>
-                <label class="smart-item"><input type="checkbox" v-model="novaAtiv.smart.R" /> <span><strong>R</strong> - Relev.</span></label>
-                <label class="smart-item"><input type="checkbox" v-model="novaAtiv.smart.T" /> <span><strong>T</strong> - Prazo</span></label>
+            <!-- SEÇÃO DE ATRIBUTOS E METODOLOGIAS -->
+            <div class="secao-atributos">
+              <!-- ATRIBUTOS SMART -->
+              <div class="grupo-atributos">
+                <label class="label-secao">Critérios SMART:</label>
+                <div class="linha-checkboxes">
+                  <label class="item-checkbox tooltip-container">
+                    <input type="checkbox" v-model="novaAtiv.smart.especifico" />
+                    <span class="checkmark"></span> [S] Específico
+                    <span class="tooltip-text">
+                      <strong>S - Specific:</strong> O objetivo está claro e sem ambiguidades sobre o que deve ser feito?
+                    </span>
+                  </label>
+
+                  <label class="item-checkbox tooltip-container">
+                    <input type="checkbox" v-model="novaAtiv.smart.mensuravel" />
+                    <span class="checkmark"></span> [M] Mensurável
+                    <span class="tooltip-text">
+                      <strong>M - Measurable:</strong> É possível medir o progresso ou saber claramente quando foi concluído?
+                    </span>
+                  </label>
+
+                  <label class="item-checkbox tooltip-container">
+                    <input type="checkbox" v-model="novaAtiv.smart.atingivel" />
+                    <span class="checkmark"></span> [A] Atingível
+                    <span class="tooltip-text">
+                      <strong>A - Achievable:</strong> A meta é realista e possível de ser alcançada com os recursos atuais?
+                    </span>
+                  </label>
+
+                  <label class="item-checkbox tooltip-container">
+                    <input type="checkbox" v-model="novaAtiv.smart.relevante" />
+                    <span class="checkmark"></span> [R] Relevante
+                    <span class="tooltip-text">
+                      <strong>R - Relevant:</strong> Essa atividade traz impacto real para os objetivos estratégicos?
+                    </span>
+                  </label>
+
+                  <label class="item-checkbox tooltip-container">
+                    <input type="checkbox" v-model="novaAtiv.smart.temporal" />
+                    <span class="checkmark"></span> [T] Temporal (Prazo)
+                    <span class="tooltip-text">
+                      <strong>T - Time-bound:</strong> Existe uma data limite ou prazo definido para conclusão?
+                    </span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- MATRIZ EISENHOWER -->
+              <div class="grupo-atributos margin-top-secao">
+                <label class="label-secao">Matriz Eisenhower (Prioridade/Urgência):</label>
+                <div class="linha-checkboxes">
+                  <label :class="['item-checkbox tooltip-container', { selecionado: novaAtiv.eisenhower === 'fazer_agora' }]">
+                    <input type="radio" name="eisenhower" value="fazer_agora" v-model="novaAtiv.eisenhower" />
+                    <span class="radio-mark"></span> 🔥 Fazer Agora
+                    <span class="tooltip-text">
+                      <strong>Urgente & Importante:</strong> Problemas imprevistos, prazos críticos e crises imediatas.
+                    </span>
+                  </label>
+
+                  <label :class="['item-checkbox tooltip-container', { selecionado: novaAtiv.eisenhower === 'agendar' }]">
+                    <input type="radio" name="eisenhower" value="agendar" v-model="novaAtiv.eisenhower" />
+                    <span class="radio-mark"></span> 📅 Agendar
+                    <span class="tooltip-text">
+                      <strong>Não Urgente, mas Importante:</strong> Planejamento, melhorias, estudo e tarefas estratégicas.
+                    </span>
+                  </label>
+
+                  <label :class="['item-checkbox tooltip-container', { selecionado: novaAtiv.eisenhower === 'delegar' }]">
+                    <input type="radio" name="eisenhower" value="delegar" v-model="novaAtiv.eisenhower" />
+                    <span class="radio-mark"></span> 🤝 Delegar
+                    <span class="tooltip-text">
+                      <strong>Urgente, mas Não Importante:</strong> Interrupções, algumas reuniões ou solicitações de terceiros.
+                    </span>
+                  </label>
+
+                  <label :class="['item-checkbox tooltip-container', { selecionado: novaAtiv.eisenhower === 'eliminar' }]">
+                    <input type="radio" name="eisenhower" value="eliminar" v-model="novaAtiv.eisenhower" />
+                    <span class="radio-mark"></span> 🗑️ Eliminar
+                    <span class="tooltip-text">
+                      <strong>Nem Urgente, Nem Importante:</strong> Distrações, tarefas desnecessárias ou desperdício de tempo.
+                    </span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- PRIORIZAÇÃO MOSCOW -->
+              <div class="grupo-atributos margin-top-secao">
+                <label class="label-secao">Priorização MoSCoW:</label>
+                <div class="linha-checkboxes">
+                  <label :class="['item-checkbox tooltip-container', { selecionado: novaAtiv.moscow === 'must' }]">
+                    <input type="radio" name="moscow" value="must" v-model="novaAtiv.moscow" />
+                    <span class="radio-mark"></span> 🛑 Obrigatório (Must)
+                    <span class="tooltip-text">
+                      <strong>Must have:</strong> Indispensável. O projeto ou entrega não funciona sem este item.
+                    </span>
+                  </label>
+
+                  <label :class="['item-checkbox tooltip-container', { selecionado: novaAtiv.moscow === 'should' }]">
+                    <input type="radio" name="moscow" value="should" v-model="novaAtiv.moscow" />
+                    <span class="radio-mark"></span> ⚠️ Importante (Should)
+                    <span class="tooltip-text">
+                      <strong>Should have:</strong> Muito relevante, adiciona grande valor, mas há contornabilidade temporária.
+                    </span>
+                  </label>
+
+                  <label :class="['item-checkbox tooltip-container', { selecionado: novaAtiv.moscow === 'could' }]">
+                    <input type="radio" name="moscow" value="could" v-model="novaAtiv.moscow" />
+                    <span class="radio-mark"></span> 💡 Se possível (Could)
+                    <span class="tooltip-text">
+                      <strong>Could have:</strong> Desejável ou "agradável de ter" (Nice-to-have), feito se houver tempo extra.
+                    </span>
+                  </label>
+
+                  <label :class="['item-checkbox tooltip-container', { selecionado: novaAtiv.moscow === 'wont' }]">
+                    <input type="radio" name="moscow" value="wont" v-model="novaAtiv.moscow" />
+                    <span class="radio-mark"></span> 🚫 Agora não (Won't)
+                    <span class="tooltip-text">
+                      <strong>Won't have:</strong> Não será feito neste ciclo/Sprint. Fica para entregas ou versões futuras.
+                    </span>
+                  </label>
+                </div>
               </div>
             </div>
 
@@ -135,10 +246,11 @@
                   <option value="longo prazo-45min">LgPz-45-min</option>
                 </select>
               </div>
+
               <div class="form-group">
                 <label>Prioridade:</label>
                 <select v-model="novaAtiv.prioridade">
-                <option value="Normal">Normal</option>
+                  <option value="Normal">Normal</option>
                   <option value="Urgente">Urgente</option>
                   <option value="Rotina">Rotina</option>
                   <option value="Imprevistos">Imprevistos</option>
@@ -157,6 +269,7 @@
                   <option value="alto">Alto</option>
                 </select>
               </div>
+
               <div class="form-group">
                 <label>Dependência?</label>
                 <select v-model="novaAtiv.dependencia">
@@ -176,7 +289,7 @@
               </select>
             </div>
 
-            <!-- Botões Dinâmicos de Ação (Salvar / Editar / Excluir) -->
+            <!-- Botões Dinâmicos de Ação -->
             <div class="botoes-form-acoes">
               <button type="submit" class="btn-sucesso">
                 {{ editandoId ? '💾 Atualizar Alterações' : '➕ Salvar Atividade' }}
@@ -211,22 +324,29 @@ const novoDevNome = ref('');
 const termoBusca = ref('');
 const editandoId = ref(null);
 
+// Objeto reativo com a estrutura alinhada ao template
 const novaAtiv = reactive({
   titulo: '',
   descricao: '',
   devId: '',
-  smart: { S: false, M: false, A: false, R: false, T: false },
-  duracao: 'medio prazo',
+  smart: { 
+    especifico: false, 
+    mensuravel: false, 
+    atingivel: false, 
+    relevante: false, 
+    temporal: false 
+  },
+  eisenhower: 'agendar',
+  moscow: 'should',
+  duracao: 'medio prazo15min',
   prioridade: 'Normal',
   risco: 'baixo',
   dependencia: 'Não',
   dependenciaAtividadeId: '',
-  telaDestino: 'cadastro' // Padrão: Apenas Salvar no Cadastro
+  telaDestino: 'cadastro'
 });
 
- 
 const obterDataHojeString = () => {
-  /**  Method obterDataHojeString = Função auxiliar para obter a data de hoje no formato YYYY-MM-DD local */
   const hoje = new Date();
   const ano = hoje.getFullYear();
   const mes = String(hoje.getMonth() + 1).padStart(2, '0');
@@ -235,7 +355,6 @@ const obterDataHojeString = () => {
 };
 
 const atividadesFiltradas = computed(() => {
-  /** Method atividadesFiltradas = Pesquisa Reativa com cálculo de Status em Tempo Real */
   if (!termoBusca.value.trim()) return [];
   
   const hojeStr = obterDataHojeString();
@@ -244,22 +363,18 @@ const atividadesFiltradas = computed(() => {
   return ativStore.atividades
     .filter(a => a.titulo.toLowerCase().includes(termo))
     .map(a => {
-      /** statusCalculado = Regra dinâmica de status:  */
       let statusCalculado = 'Disponível';
 
       if (a.telaDestino === 'backlog') {
         statusCalculado = 'Já selecionado';
       } else if (a.telaDestino === 'hoje') {
         if (!a.concluida) {
-          // Se está no Fazendo Hoje e não concluiu, está ocupada
           statusCalculado = 'Já selecionado';
         } else if (a.concluida && a.dataConclusao === hojeStr) {
-          // Se concluiu HOJE, continua bloqueada para evitar duplicar no mesmo dia
           statusCalculado = 'Já selecionado';
         }
       }
 
-      // Retorna o objeto com o status atualizado em tempo real para a interface
       return {
         ...a,
         status: statusCalculado
@@ -272,14 +387,25 @@ const carregarAtividadeParaEdicao = (ativ) => {
   novaAtiv.titulo = ativ.titulo;
   novaAtiv.descricao = ativ.descricao;
   novaAtiv.devId = ativ.devId;
-  novaAtiv.smart = { ...ativ.smart };
+  
+  // Garante a cópia segura das propriedades do SMART com fallback
+  novaAtiv.smart = {
+    especifico: Boolean(ativ.smart?.especifico),
+    mensuravel: Boolean(ativ.smart?.mensuravel),
+    atingivel: Boolean(ativ.smart?.atingivel),
+    relevante: Boolean(ativ.smart?.relevante),
+    temporal: Boolean(ativ.smart?.temporal)
+  };
+  
+  novaAtiv.eisenhower = ativ.eisenhower || 'agendar';
+  novaAtiv.moscow = ativ.moscow || 'should';
   novaAtiv.duracao = ativ.duracao;
   novaAtiv.prioridade = ativ.prioridade;
   novaAtiv.risco = ativ.risco;
   novaAtiv.dependencia = ativ.dependencia;
   novaAtiv.dependenciaAtividadeId = ativ.dependenciaAtividadeId;
   novaAtiv.telaDestino = ativ.telaDestino;
-  termoBusca.value = ''; // Limpa a busca ao selecionar
+  termoBusca.value = '';
 };
 
 const salvarDev = () => {
@@ -288,59 +414,44 @@ const salvarDev = () => {
   novoDevNome.value = '';
 };
 
-
 const salvarAtividade = () => {
+  const hojeStr = obterDataHojeString();
 
-/** salvarAtividade = Adicione no início de salvarAtividade em Cadastro.vue: */ 
-const hojeStr = obterDataHojeString();
+  const jaExisteHoje = ativStore.atividades.some(a => 
+    a.titulo.trim().toLowerCase() === novaAtiv.titulo.trim().toLowerCase() &&
+    a.telaDestino === novaAtiv.telaDestino &&
+    !a.concluida
+  );
 
-const jaExisteHoje = ativStore.atividades.some(a => 
-  /** Method jaExiteHoje = Verifica se já existe uma tarefa ativa hoje com o mesmo título e na mesma tela destino */
-  a.titulo.trim().toLowerCase() === novaAtiv.titulo.trim().toLowerCase() &&
-  a.telaDestino === novaAtiv.telaDestino &&
-  !a.concluida
-);
+  if (jaExisteHoje && !editandoId.value) {
+    alert(`A tarefa "${novaAtiv.titulo}" já está presente na tela ${novaAtiv.telaDestino.toUpperCase()} hoje!`);
+    return;
+  }
 
-if (jaExisteHoje && !editandoId.value) {
-  alert(`A tarefa "${novaAtiv.titulo}" já está presente na tela ${novaAtiv.telaDestino.toUpperCase()} hoje!`);
-  return; // Interrompe o salvamento para evitar duplicados
-}
-
-
-  
-
-  // Busca a versão original da atividade na store caso esteja em modo de edição
   const ativOriginal = editandoId.value 
     ? ativStore.atividades.find(a => a.id === editandoId.value) 
     : null;
 
-  // Se a atividade editada já foi concluída em um dia anterior,
-  // nós NÃO podemos alterá-la! Devemos gerar uma REUTILIZAÇÃO (novo registro).
   const ehReutilizacao = ativOriginal && ativOriginal.concluida;
 
   if (ehReutilizacao) {
-    // === REUTILIZAÇÃO: CRIA UM NOVO REGISTRO ===
     const novaCopiaReutilizada = {
       ...novaAtiv,
       smart: { ...novaAtiv.smart },
-      // Descarta o ID antigo para que a store crie um novo
       id: undefined, 
       concluida: false,
       dataConclusao: null,
       impedida: false,
-      detalhesDia: novaAtiv.detalhesDia || "", // Preserva/adiciona novos detalhes
+      detalhesDia: novaAtiv.detalhesDia || "",
       dataCriacao: hojeStr,
       dataEntradaBacklog: (novaAtiv.telaDestino === 'backlog' || novaAtiv.telaDestino === 'hoje') 
         ? hojeStr 
         : null
     };
 
-    // Adiciona como um NOVO item no localStorage. 
-    // A tarefa antiga do "Feito Ontem" permanece 100% INTACTA!
     ativStore.adicionarAtividade(novaCopiaReutilizada);
 
   } else if (editandoId.value) {
-    // === EDIÇÃO NORMAL DE TAREFA PENDENTE ===
     const dadosSalvar = {
       ...novaAtiv,
       smart: { ...novaAtiv.smart },
@@ -355,7 +466,6 @@ if (jaExisteHoje && !editandoId.value) {
     ativStore.atualizarAtividade(editandoId.value, dadosSalvar);
 
   } else {
-    // === NOVO CADASTRO ===
     const dadosNovos = {
       ...novaAtiv,
       smart: { ...novaAtiv.smart },
@@ -373,8 +483,6 @@ if (jaExisteHoje && !editandoId.value) {
   limparFormulario();
 };
 
-
-
 const excluirAtividadeEdicao = () => {
   if (editandoId.value && confirm("Tem certeza que deseja deletar permanentemente esta atividade?")) {
     ativStore.excluirAtividade(editandoId.value);
@@ -387,8 +495,16 @@ const limparFormulario = () => {
   novaAtiv.titulo = '';
   novaAtiv.descricao = '';
   novaAtiv.devId = '';
-  novaAtiv.smart = { S: false, M: false, A: false, R: false, T: false };
-  novaAtiv.duracao = 'medio prazo';
+  novaAtiv.smart = { 
+    especifico: false, 
+    mensuravel: false, 
+    atingivel: false, 
+    relevante: false, 
+    temporal: false 
+  };
+  novaAtiv.eisenhower = 'agendar';
+  novaAtiv.moscow = 'should';
+  novaAtiv.duracao = 'medio prazo15min';
   novaAtiv.prioridade = 'Normal';
   novaAtiv.risco = 'baixo';
   novaAtiv.dependencia = 'Não';
@@ -398,23 +514,24 @@ const limparFormulario = () => {
 };
 </script>
 
-
-
 <style scoped>
 .painel-grid {
   display: grid;
   grid-template-columns: 1fr 2fr;
   gap: 20px;
 }
+
 @media (max-width: 900px) {
   .painel-grid { grid-template-columns: 1fr; }
 }
+
 .card-secao {
   background: #fbfbfb;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 20px;
 }
+
 .header-inline {
   display: flex;
   justify-content: space-between;
@@ -423,6 +540,7 @@ const limparFormulario = () => {
   gap: 10px;
   margin-bottom: 15px;
 }
+
 .btn-limpar {
   background: #34495e;
   color: white;
@@ -432,10 +550,12 @@ const limparFormulario = () => {
   cursor: pointer;
   font-size: 0.8em;
 }
+
 .busca-container {
   margin-bottom: 20px;
   position: relative;
 }
+
 .input-busca {
   width: 100%;
   padding: 10px;
@@ -443,6 +563,7 @@ const limparFormulario = () => {
   border-radius: 6px;
   box-sizing: border-box;
 }
+
 .resultados-busca {
   position: absolute;
   top: 100%;
@@ -456,6 +577,7 @@ const limparFormulario = () => {
   overflow-y: auto;
   box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
+
 .item-busca {
   padding: 10px;
   border-bottom: 1px solid #eee;
@@ -465,15 +587,18 @@ const limparFormulario = () => {
   align-items: center;
   font-size: 0.9em;
 }
+
 .item-busca:hover {
   background: #ebf5fb;
 }
+
 .status-badge {
   font-size: 0.75em;
   padding: 2px 6px;
   border-radius: 4px;
   font-weight: bold;
 }
+
 .status-badge.disponível { background: #2ecc71; color: white; }
 .status-badge.selecionado { background: #95a5a6; color: white; }
 
@@ -482,14 +607,17 @@ const limparFormulario = () => {
   gap: 10px;
   margin-bottom: 15px;
 }
+
 .form-row input {
   flex: 1;
   padding: 8px;
 }
+
 .lista-simples {
   list-style: none;
   padding: 0;
 }
+
 .lista-simples li {
   display: flex;
   justify-content: space-between;
@@ -500,54 +628,47 @@ const limparFormulario = () => {
   border-radius: 4px;
   font-size: 0.9em;
 }
+
 .form-scrum {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
+
 .form-group {
   display: flex;
   flex-direction: column;
   flex: 1;
 }
+
 .form-group-row {
   display: flex;
   gap: 10px;
 }
+
 @media (max-width: 600px) {
   .form-group-row { flex-direction: column; }
 }
+
 label {
   font-size: 0.85em;
   font-weight: bold;
   margin-bottom: 4px;
   color: #2c3e50;
 }
+
 input, select, textarea {
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
-.checkbox-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-  gap: 8px;
-  background: #f1f2f6;
-  padding: 10px;
-  border-radius: 6px;
-}
-.smart-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.8em;
-  cursor: pointer;
-}
+
 .botoes-form-acoes {
   display: flex;
   gap: 10px;
   margin-top: 10px;
 }
+
 .btn-sucesso {
   flex: 2;
   background: #2ecc71;
@@ -559,6 +680,7 @@ input, select, textarea {
   font-weight: bold;
   font-size: 1em;
 }
+
 .btn-deletar {
   flex: 1;
   background: #e74c3c;
@@ -569,6 +691,7 @@ input, select, textarea {
   border-radius: 4px;
   font-weight: bold;
 }
+
 .btn-primary {
   background: #3498db;
   color: white;
@@ -577,13 +700,13 @@ input, select, textarea {
   border-radius: 4px;
   cursor: pointer;
 }
+
 .btn-danger-link {
   background: none;
   border: none;
   color: #e74c3c;
   cursor: pointer;
 }
-
 
 .backup-box {
   margin-bottom: 20px;
@@ -640,5 +763,106 @@ input, select, textarea {
 
 .btn-backup.importar:hover {
   background-color: #2f855a;
+}
+
+/* --- ESTRUTURA DOS ATRIBUTOS --- */
+.secao-atributos {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 15px 0;
+}
+
+.margin-top-secao {
+  margin-top: 16px;
+}
+
+.label-secao {
+  display: block;
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: #2d3748;
+  margin-bottom: 8px;
+}
+
+.linha-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.item-checkbox {
+  display: inline-flex;
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #cbd5e0;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: #4a5568;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+
+.item-checkbox:hover {
+  border-color: #3182ce;
+  background-color: #ebf8ff;
+}
+
+.item-checkbox input {
+  margin-right: 6px;
+  cursor: pointer;
+}
+
+/* --- ESTILO DE TOOLTIP EXPLICATIVO --- */
+.tooltip-container {
+  position: relative;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  width: 220px;
+  background-color: #2d3748;
+  color: #ffffff;
+  text-align: left;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 0.78rem;
+  line-height: 1.3;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+
+  position: absolute;
+  z-index: 100;
+  bottom: 125%; 
+  left: 50%;
+  transform: translateX(-50%);
+
+  opacity: 0;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  pointer-events: none;
+}
+
+.tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #2d3748 transparent transparent transparent;
+}
+
+.tooltip-container:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltip-text strong {
+  color: #63b3ed;
+  display: block;
+  margin-bottom: 2px;
 }
 </style>

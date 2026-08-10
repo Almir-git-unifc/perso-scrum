@@ -30,6 +30,8 @@ feat(fix): ver_man 00.10.001 – Fixed editable fields regarding the per-screen 
 
 feat(backup): ver_man 00.11.001 – implemented function for localStorage backup and restoration
 
+feat(vue): ver_man 00.12.001 – Add MoSCoW and Eisenhower  with tooltips in Cadastro form
+
 update readme.md
 
 
